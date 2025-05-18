@@ -1,12 +1,12 @@
 let tg = window.Telegram.WebApp;
-let user = null;
+let user = tg?.initDataUnsafe?.user;
 
-function auth() {
+window.addEventListener("DOMContentLoaded", () => {
   tg.expand();
   tg.ready();
-  user = tg.initDataUnsafe.user;
+
   if (!user) {
-    alert("Telegram авторизация не работает");
+    alert("❌ Не удалось получить данные Telegram. Запусти игру через Telegram.");
     return;
   }
 
@@ -15,7 +15,7 @@ function auth() {
   document.getElementById("welcome").textContent = `Привет, ${user.first_name}!`;
 
   loadStats();
-}
+});
 
 function loadStats() {
   fetch(`/api/stats/${user.id}`).then(res => res.json()).then(data => {
